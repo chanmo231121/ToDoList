@@ -1,21 +1,23 @@
 package com.teamsparta.todolisttest.domain.todo.dto
 
+import com.teamsparta.todolisttest.domain.user.model.User
 import java.time.LocalDateTime
 
 
 data class ToDoResponse(
 
-    val nickname: Long,
+    val id:Long,
     val title: String,
     val description: String,
-    val isCompleted : Boolean,
-    val priority: Int,
+    val isCompleted: Boolean,
     val isShared: Boolean,
-    val time: LocalDateTime,
+    val date: LocalDateTime,
 
 
 
-)
+
+
+    )
 
 
 //id
@@ -24,3 +26,4 @@ data class ToDoResponse(
 //완료됬는지
 //우선순위
 //공유
+//날짜

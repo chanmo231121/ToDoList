@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-//
+
 
 
 @RequestMapping("/todos")
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController
 class ToDoController (
     private val todoService: ToDoService
 ){
-
 
     //단건조회
     @GetMapping("/{todoId}")
@@ -50,7 +49,7 @@ class ToDoController (
     fun createToDo(@RequestBody createTodoRequest: CreateToDoRequest): ResponseEntity<ToDoResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(todoService.createToDo(createTodoRequest))
+            .body(todoService.createToDo((createTodoRequest)))
     }
 
     // ToDo수정
@@ -67,18 +66,12 @@ class ToDoController (
     // ToDo삭제
     @DeleteMapping("/{todoId}")
     fun deleteToDo(@PathVariable todoId: Long): ResponseEntity<Unit> {
+        todoService.deleteToDo((todoId))
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
 
-
-    @ExceptionHandler(ModelNotFoundException::class)
-    fun handleModelNotFoundException(e:ModelNotFoundException):ResponseEntity<com.teamsparta.todolisttest.domain.todo.exception.dto.ErrorResponse>{
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(com.teamsparta.todolisttest.domain.todo.exception.dto.ErrorResponse(e.message))
-    }
-    //ErrorResponse 가 스프링이 있고 exception에 dto로 만든게 있다 지금은 만든 dto 확인해보기
-
-
-
 }
+
+//서비스랑 뽀짝뽀짝한걸 호출하는거임  상태와 바디쪽으로 호출
