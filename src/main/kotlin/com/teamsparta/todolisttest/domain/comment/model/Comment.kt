@@ -10,40 +10,47 @@ import java.time.LocalDateTime
 @Table(name = "comment")
 class Comment(
 
+    @Column(name = "name")
+    var name: String,
+
     @Column(name = "description")
     var description: String,
 
     @Column(name = "created_at")
-    var createdAt: LocalDateTime,
+    var date: LocalDateTime =LocalDateTime.now(),
 
-    @Column(name = "comment_todo_id")
-    var todoId: String,
+    @Column(name = "todo_id")
+    var todoId: Long,
 
-    @Column(name = "comment_user_id")
-    var userId: String,
+    @Column(name = "password")
+    var password:String,
+
+
+
+
+
 
 
 
 
 ) {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "todo_id")
-    val todo: ToDo? = null
+
+
 
 
 }
 
 fun Comment.toResponse(): CommentResponse {
     return CommentResponse(
-        id = id,
+
         description = description,
-        createdAt = createdAt,
-        todoId = todoId,
-        userId = userId,
+        date = date,
 
 
         )

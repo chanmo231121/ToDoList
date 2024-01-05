@@ -1,5 +1,7 @@
 package com.teamsparta.todolisttest.domain.todo.controller
 
+import com.teamsparta.todolisttest.domain.comment.dto.CommentResponse
+import com.teamsparta.todolisttest.domain.comment.dto.CreateCommentRequest
 import com.teamsparta.todolisttest.domain.todo.dto.CreateToDoRequest
 import com.teamsparta.todolisttest.domain.todo.dto.ToDoResponse
 import com.teamsparta.todolisttest.domain.todo.dto.UpdateToDoRequest
@@ -45,12 +47,14 @@ class ToDoController (
     }
 
     // ToDo생성
-    @PostMapping
-    fun createToDo(@RequestBody createTodoRequest: CreateToDoRequest): ResponseEntity<ToDoResponse> {
+    @PostMapping("/{userId}")
+    fun createToDo(@PathVariable userId:Long, @RequestBody createTodoRequest: CreateToDoRequest): ResponseEntity<ToDoResponse> {
+        //val userId = createTodoRequest.userId
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(todoService.createToDo((createTodoRequest)))
-    }
+            .body(todoService.createToDo(userId,createTodoRequest))
+
+        }
 
     // ToDo수정
     @PutMapping("/{todoId}")

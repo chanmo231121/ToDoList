@@ -1,5 +1,9 @@
 package com.teamsparta.todolisttest.domain.todo.service
 
+import com.teamsparta.todolisttest.domain.comment.dto.CommentResponse
+import com.teamsparta.todolisttest.domain.comment.dto.CreateCommentRequest
+import com.teamsparta.todolisttest.domain.comment.model.Comment
+import com.teamsparta.todolisttest.domain.comment.model.toResponse
 import com.teamsparta.todolisttest.domain.todo.dto.CreateToDoRequest
 import com.teamsparta.todolisttest.domain.todo.dto.ToDoResponse
 import com.teamsparta.todolisttest.domain.todo.dto.UpdateToDoRequest
@@ -21,7 +25,7 @@ class TodoServiceImpl(
     private val userRepository: UserRepository,
 ) : ToDoService {
 
-    override fun getAllToDoList(): List<ToDoResponse> {
+    override fun getAllToDoList(orderBy: String): List<ToDoResponse> {
         return toDoRepository.findAll().map { it.toResponse() }
 
         //DB에서 모든 TodoList를 가져와서 TodoResponse로 변환 후 반환
@@ -37,12 +41,14 @@ class TodoServiceImpl(
     }
 
     @Transactional
-    override fun createToDo(request: CreateToDoRequest): ToDoResponse {
+    override fun createToDo(userId:Long, request: CreateToDoRequest): ToDoResponse {
         return toDoRepository.save(
             ToDo(
                 title = request.title,
+                name = request.name,
                 description = request.description,
                 date = LocalDateTime.now(),
+                userId = userId
 
 
 
@@ -53,6 +59,8 @@ class TodoServiceImpl(
         //중간에 예외가 발생했을 때, 일부만 수행되면 안되서 Transactional 사용
     }
 
+
+
     @Transactional
     override fun updateToDo(todoId: Long, request: UpdateToDoRequest): ToDoResponse {
 
@@ -61,6 +69,7 @@ class TodoServiceImpl(
         todo.title = title
         todo.description = description
         return toDoRepository.save(todo).toResponse()
+
         // 만약 todoId에 해당하는 todolist가 없다면 throw ModelNotFoundException
         // DB에서 todoId에 해당하는 todolist를 가져와서 request로 업데이트 후 DB에 저장, 결과를 todoResponse로 변환 후 반환
         //중간에 예외가 발생했을 때, 일부만 수행되면 안되서 Transactional 사용

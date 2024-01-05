@@ -1,5 +1,6 @@
 package com.teamsparta.todolisttest.domain.user.model
 
+import com.teamsparta.todolisttest.domain.comment.model.Comment
 import com.teamsparta.todolisttest.domain.todo.model.ToDo
 import com.teamsparta.todolisttest.domain.user.dto.UserResponse
 import jakarta.persistence.*
@@ -7,10 +8,10 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "app_user")
-class User (
+class User(
 
     @Column(name = "email")
-    val email:String,
+    val email: String,
 
     @Column(name = "password")
     val password: String,
@@ -23,8 +24,12 @@ class User (
     val role: UserRole,
 
 
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val todos: List<ToDo> = mutableListOf()
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    var todos: MutableList<ToDo> = mutableListOf(),
+
+
+
 
 ) {
     @Id
@@ -33,7 +38,7 @@ class User (
 }
 
 
-fun User.toResponse():UserResponse{
+fun User.toResponse(): UserResponse {
     return UserResponse(
         id = id!!,
         nickname = profile.nickname,

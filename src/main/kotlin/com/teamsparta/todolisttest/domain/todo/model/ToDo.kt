@@ -27,12 +27,21 @@ class ToDo(
     @Column(name = "date")
     var date: LocalDateTime,
 
-    @OneToMany(mappedBy = "todo", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @Column(name = "name")
+    var name: String,
+
+
+    @Column(name = "user_id")
+    var userId: Long,
+
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinColumn(name = "todo_id")
     var comments: MutableList<Comment> = mutableListOf(),
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+ /*   @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val user: User? = null
+    val user: User? = null*/
 
 
 

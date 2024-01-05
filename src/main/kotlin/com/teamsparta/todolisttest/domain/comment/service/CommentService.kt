@@ -5,15 +5,17 @@ import com.teamsparta.todolisttest.domain.comment.dto.CreateCommentRequest
 import com.teamsparta.todolisttest.domain.comment.dto.UpdateCommentRequest
 
 interface CommentService {
-    fun getAllCommentList(): List<CommentResponse>
+    fun getAllCommentList(todoId: Long): List<CommentResponse>
 
-    fun getCommentById(commentId:Long) : CommentResponse
+    fun getCommentById(todoId: Long, commentId:Long) : CommentResponse
 
-    fun createComment(request: CreateCommentRequest): CommentResponse
+    fun createComment(todoId: Long, request: CreateCommentRequest): CommentResponse
 
-    fun updateComment(commentId: Long,request: UpdateCommentRequest):CommentResponse
+    fun updateComment(todoId:Long, commentId: Long,request: UpdateCommentRequest):CommentResponse
 
-    fun deleteComment(commentId: Long)
+    fun deleteComment(todoId: Long, commentId: Long, password:String){
+
+    }
 
 
 }

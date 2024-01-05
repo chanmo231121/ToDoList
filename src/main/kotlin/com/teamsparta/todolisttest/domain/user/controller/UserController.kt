@@ -18,7 +18,7 @@ class UserController(
     private val userService: UserServiceImpl
 ) {
 
-    @PostMapping("/{signup}")
+    @PostMapping("/signup")
     fun signUp(@RequestBody signupRequest: SignUpRequest): ResponseEntity<UserResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)

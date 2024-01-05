@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component
 interface ToDoService {
 
 
-    fun getAllToDoList():List<ToDoResponse>
+    fun getAllToDoList(orderBy: String):List<ToDoResponse>
 
     fun getToDoById(todoId:Long):ToDoResponse
 
-    fun createToDo(request: CreateToDoRequest):ToDoResponse
+    fun createToDo(userId:Long, request: CreateToDoRequest):ToDoResponse
 
     fun updateToDo(todoId: Long, request: UpdateToDoRequest):ToDoResponse
 
