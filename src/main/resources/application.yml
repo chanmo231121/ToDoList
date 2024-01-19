@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db.bzqapqhlpowpaqburshc.supabase.co:5432/postgres?user=postgres&password=TP4LBaOSyhWkikKo
+    username: postgress
+    password: TP4LBaOSyhWkikKo
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+      org:
+        jdbc:
+          bind: trace
+        springframework:
+          security: debug
+
+auth:
+  jwt:
+    issuer: team.sparta.cpm
+    secret: 52DANSJDNASJnjdgsnjFDNJSDFSDFDSF
+    accessTokenExpirationHour: 168

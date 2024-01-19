@@ -4,9 +4,7 @@ import com.teamsparta.todolisttest.domain.todo.model.ToDo
 
 data class CreateCommentRequest(
 
-    val name:String,
+    val userId: Long,
     val description:String,
-    val password:String
-
 
 )

@@ -13,7 +13,7 @@ interface CommentService {
 
     fun updateComment(todoId:Long, commentId: Long,request: UpdateCommentRequest):CommentResponse
 
-    fun deleteComment(todoId: Long, commentId: Long, password:String){
+    fun deleteComment(todoId: Long, commentId: Long){
 
     }
 

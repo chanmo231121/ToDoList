@@ -1,21 +1,42 @@
 package com.teamsparta.todolisttest.domain.user.service
 
 import com.teamsparta.todolisttest.domain.todo.exception.ModelNotFoundException
-import com.teamsparta.todolisttest.domain.user.dto.SignUpRequest
-import com.teamsparta.todolisttest.domain.user.dto.UpdateUserProfileRequest
-import com.teamsparta.todolisttest.domain.user.dto.UserResponse
+import com.teamsparta.todolisttest.domain.user.dto.*
 import com.teamsparta.todolisttest.domain.user.model.Profile
 import com.teamsparta.todolisttest.domain.user.model.User
 import com.teamsparta.todolisttest.domain.user.model.UserRole
 import com.teamsparta.todolisttest.domain.user.model.toResponse
 
 import com.teamsparta.todolisttest.domain.user.repository.UserRepository
+import com.teamsparta.todolisttest.infra.security.jwt.JwtPlugin
+import jakarta.transaction.InvalidTransactionException
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UserServiceImpl(private val userRepository: UserRepository) : UserService {
+class UserServiceImpl(
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val jwtPlugin: JwtPlugin
+) : UserService {
+
+    override fun login(request: LoginRequest): LoginResponse {
+        val user = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User",null)
+
+        if (user.role.name != request.role || !passwordEncoder.matches(request.password, user .password,) ){
+            throw InvalidTransactionException()
+        }
+
+        return LoginResponse(
+            accessToken = jwtPlugin.generateAccessToken(
+                subject = user.id.toString(),
+                email = user.email,
+                role = user.role.name
+            )
+        )
+    }
 
     @Transactional
     override fun signUp(request: SignUpRequest): UserResponse {
@@ -26,8 +47,7 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         return userRepository.save(
             User(
                 email = request.email,
-                // TODO: 비밀번호 암호화
-                password = request.password,
+                password = passwordEncoder.encode(request.password),
                 profile = Profile(
                     nickname = request.nickname
                 ),
@@ -50,6 +70,8 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
 
         return userRepository.save(user).toResponse()
     }
+
+
 }
 
 // UserServiceImpl.kt

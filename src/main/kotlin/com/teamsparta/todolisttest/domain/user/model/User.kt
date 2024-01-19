@@ -1,6 +1,6 @@
 package com.teamsparta.todolisttest.domain.user.model
 
-import com.teamsparta.todolisttest.domain.comment.model.Comment
+
 import com.teamsparta.todolisttest.domain.todo.model.ToDo
 import com.teamsparta.todolisttest.domain.user.dto.UserResponse
 import jakarta.persistence.*

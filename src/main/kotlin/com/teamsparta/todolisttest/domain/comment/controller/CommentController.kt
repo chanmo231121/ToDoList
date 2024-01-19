@@ -9,6 +9,7 @@ import com.teamsparta.todolisttest.domain.todo.dto.ToDoResponse
 import com.teamsparta.todolisttest.domain.todo.dto.UpdateToDoRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/todos/{todoId}/comment")
@@ -25,6 +26,7 @@ class CommentController (
 
     //comment 단건조회
     // @GetMapping("/{commentId}"): 특정 commentId에 해당하는 코멘트를 조회
+    @PreAuthorize("hasRole('ADMIN') and hasRole('PERSON')")
     @GetMapping("/{commentId}")
     fun getComment(@PathVariable todoId: Long, commentId: Long): ResponseEntity<CommentResponse> {
 
@@ -41,6 +43,7 @@ class CommentController (
 
     //comment목록조회
     // @GetMapping(): 특정 todoId에 해당하는 모든 코멘트 리스트를 조회한다
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PERSON')")
     @GetMapping()
     fun getCommentList(@PathVariable todoId: Long): ResponseEntity<List<CommentResponse>> {
         return ResponseEntity
@@ -53,6 +56,7 @@ class CommentController (
 
     // comment 생성
     // @PostMapping(): 특정 todoId에 대한 새로운 코멘트를 생성
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PERSON')")
     @PostMapping()
     fun createComment(@PathVariable todoId: Long,
                       @RequestBody createCommentRequest: CreateCommentRequest): ResponseEntity<CommentResponse> {
@@ -65,6 +69,7 @@ class CommentController (
 
     // comment수정
     // @PutMapping("/{commentId}"): 특정 todoId에 대한 특정 commentId의 코멘트를 업데이트
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PERSON')")
     @PutMapping("/{commentId}")
     fun updateComment(
         @PathVariable commentId: Long,
@@ -81,9 +86,11 @@ class CommentController (
 
     // comment삭제
     // @DeleteMapping("/{commentId}"): 특정 commentId의 코멘트를 삭제
+    @PreAuthorize("hasRole('ADMIN') ")
     @DeleteMapping("/{commentId}")
+
     fun deleteComment( @PathVariable todoId: Long ,@PathVariable commentId: Long, @RequestBody password:String): ResponseEntity<Unit> {
-        commentService.deleteComment(todoId, commentId,password)
+        commentService.deleteComment(todoId, commentId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
